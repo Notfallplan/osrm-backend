@@ -940,12 +940,12 @@ Feature: Simple Turns
 
         And the ways
             | nodes | name          | highway   | oneway |
-            | ab    | Stralauer Str | secondary | yes    |
+            | ab    | Molkenmarkt   | secondary | yes    |
             | bc    | Stralauer Str | secondary | yes    |
             | cd    | Stralauer Str | secondary | yes    |
             | ec    | Molkenmarkt   | secondary | yes    |
 
         When I route I should get
             | waypoints | turns         | route                     |
-            | a,d       | depart,arrive | Stralauer Str             |
+            | a,d       | depart,arrive | Molkenmarkt,Stralauer Str |
             | e,d       | depart,arrive | Molkenmarkt,Stralauer Str |
