@@ -964,6 +964,6 @@ Feature: Simple Turns
             | ec    | Molkenmarkt   | secondary | yes    |
 
         When I route I should get
-            | waypoints | turns         | route                     |
-            | a,d       | depart,arrive | Molkenmarkt,Stralauer Str |
-            | e,d       | depart,arrive | Molkenmarkt,Stralauer Str |
+            | waypoints | turns                              | route                                   |
+            | a,d       | depart,new name straight,arrive    | Molkenmarkt,Stralauer Str,Stralauer Str |
+            | e,d       | depart,new name slight left,arrive | Molkenmarkt,Stralauer Str,Stralauer Str |
