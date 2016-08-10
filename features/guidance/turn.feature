@@ -949,3 +949,21 @@ Feature: Simple Turns
             | waypoints | turns         | route                     |
             | a,d       | depart,arrive | Molkenmarkt,Stralauer Str |
             | e,d       | depart,arrive | Molkenmarkt,Stralauer Str |
+
+    Scenario: Unnecessary Slight Left onto Stralauer Strasse
+        Given the node map
+            |   | e |   |   |   |   |   |
+            |   |   |   |   |   |   |   |
+            | a |   | b |   | c |   | d |
+
+        And the ways
+            | nodes | name          | highway   | oneway |
+            | ab    | Molkenmarkt   | secondary | yes    |
+            | bc    | Molkenmarkt   | secondary | yes    |
+            | cd    | Stralauer Str | secondary | yes    |
+            | ec    | Molkenmarkt   | secondary | yes    |
+
+        When I route I should get
+            | waypoints | turns         | route                     |
+            | a,d       | depart,arrive | Molkenmarkt,Stralauer Str |
+            | e,d       | depart,arrive | Molkenmarkt,Stralauer Str |
