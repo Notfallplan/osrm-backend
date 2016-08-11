@@ -193,8 +193,22 @@ bool IntersectionGenerator::canMerge(const Intersection &intersection,
         return false;
 
     // mergeable if the angle is not too big
-    return angularDeviation(intersection[first_index].turn.angle,
-                            intersection[second_index].turn.angle) < 60;
+    const auto angle_between = angularDeviation(intersection[first_index].turn.angle,
+                                                intersection[second_index].turn.angle);
+    if (angle_between < 60)
+        return true;
+
+    // Finally, we also allow merging if all streets offer the same name, it is only three roads and
+    // the angle is not fully extreme:
+    if (intersection.size() != 3)
+        return false;
+
+    // needs to be same road coming in
+    if (node_based_graph.GetEdgeData(intersection[0].turn.eid).name_id != first_data.name_id)
+        return false;
+
+    // Allow larger angles if its three roads only of the same name
+    return angle_between < 100;
 }
 
 /*
@@ -347,7 +361,7 @@ Intersection IntersectionGenerator::adjustForJoiningRoads(const NodeID node_at_i
                                                           Intersection intersection) const
 {
     // nothing to do for dead ends
-    if ( intersection.size() <= 1)
+    if (intersection.size() <= 1)
         return intersection;
 
     for (auto &road : intersection)
