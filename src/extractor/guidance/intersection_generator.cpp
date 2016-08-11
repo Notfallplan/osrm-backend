@@ -192,6 +192,10 @@ bool IntersectionGenerator::canMerge(const Intersection &intersection,
     if (first_data.reversed == second_data.reversed)
         return false;
 
+    // one of them needs to be invalid
+    if (intersection[first_index].entry_allowed && intersection[second_index].entry_allowed)
+        return false;
+
     // mergeable if the angle is not too big
     const auto angle_between = angularDeviation(intersection[first_index].turn.angle,
                                                 intersection[second_index].turn.angle);
@@ -203,12 +207,33 @@ bool IntersectionGenerator::canMerge(const Intersection &intersection,
     if (intersection.size() != 3)
         return false;
 
+    const std::size_t missing_index = [first_index,second_index]() {
+        if (first_index == 0)
+            return second_index == 2 ? 1 : 2;
+        else if (first_index == 1)
+            return second_index == 2 ? 0 : 2;
+        else
+            return second_index == 1 ? 0 : 1;
+    }();
+
     // needs to be same road coming in
-    if (node_based_graph.GetEdgeData(intersection[0].turn.eid).name_id != first_data.name_id)
+    if (node_based_graph.GetEdgeData(intersection[missing_index].turn.eid).name_id !=
+        first_data.name_id)
         return false;
 
+    // we only allow collapsing of a Y like fork. So the angle to the missing index has to be
+    // roughly equal:
+    const auto y_angle_difference =
+        angularDeviation(angularDeviation(intersection[missing_index].turn.angle,
+                                          intersection[first_index].turn.angle),
+                         angularDeviation(intersection[missing_index].turn.angle,
+                                          intersection[second_index].turn.angle));
+
     // Allow larger angles if its three roads only of the same name
-    return angle_between < 100;
+    std::cout << "New Angle: " << angle_between << " y: " << y_angle_difference << std::endl;
+    for (auto road : intersection)
+        std::cout << "\t" << toString(road) << std::endl;
+    return angle_between < 100 && y_angle_difference < FUZZY_ANGLE_DIFFERENCE;
 }
 
 /*
