@@ -266,6 +266,8 @@ RoundaboutType RoundaboutHandler::getRoundaboutType(const NodeID nid) const
 
     // this value is a hard abort to deal with potential self-loops
     NodeID last_node = nid;
+    std::set<NodeID> encountered_nodes;
+    
     while (0 == roundabout_nodes.count(last_node))
     {
         // only count exits/entry locations
@@ -280,6 +282,11 @@ RoundaboutType RoundaboutHandler::getRoundaboutType(const NodeID nid) const
         }
 
         last_node = node_based_graph.GetTarget(eid);
+        
+        if (encountered_nodes.count(last_node) > 0)
+            break;
+        
+        encountered_nodes.insert(last_node);
 
         if (last_node == nid)
             break;
