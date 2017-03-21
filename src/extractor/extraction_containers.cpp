@@ -344,6 +344,7 @@ void ExtractionContainers::PrepareEdges(lua_State *segment_state)
 
         auto &edge = edge_iterator->result;
         edge.weight = std::max(1, static_cast<int>(std::floor(weight + .5)));
+        edge.distance_data = DistanceData(distance);
 
         // assign new node id
         auto id_iter = external_to_internal_node_id_map.find(node_iterator->node_id);

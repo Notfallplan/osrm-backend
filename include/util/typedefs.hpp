@@ -59,6 +59,9 @@ using EdgeID = unsigned int;
 using NameID = std::uint32_t;
 using EdgeWeight = int;
 
+using DistanceData = float;
+static const DistanceData INVALID_DISTANCE_DATA = -1;
+
 using BearingClassID = std::uint32_t;
 static const BearingClassID INVALID_BEARING_CLASSID = std::numeric_limits<std::uint32_t>::max();
 

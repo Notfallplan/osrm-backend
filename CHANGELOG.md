@@ -1,3 +1,7 @@
+# 5.2.7-psi1
+  - Added support to query distances next to durations via the table service.
+  - All services accept protocol version 1001 to designate the added distance support
+
 # 5.2.7
   - Bugfixes
     - BREAKING: Fix bug that could result in failure to load 'osrm.icd' files. This breaks the dataformat

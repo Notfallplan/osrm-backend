@@ -26,7 +26,8 @@ struct NodeBasedEdge
                   bool startpoint,
                   TravelMode travel_mode,
                   bool is_split,
-                  guidance::RoadClassificationData road_classification);
+                  guidance::RoadClassificationData road_classification,
+                  const DistanceData & distance_data);
 
     bool operator<(const NodeBasedEdge &other) const;
 
@@ -42,6 +43,7 @@ struct NodeBasedEdge
     bool is_split : 1;
     TravelMode travel_mode : 4;
     guidance::RoadClassificationData road_classification;
+    DistanceData distance_data;
 };
 
 struct NodeBasedEdgeWithOSM : NodeBasedEdge
@@ -57,7 +59,8 @@ struct NodeBasedEdgeWithOSM : NodeBasedEdge
                          bool startpoint,
                          TravelMode travel_mode,
                          bool is_split,
-                         guidance::RoadClassificationData road_classification);
+                         guidance::RoadClassificationData road_classification,
+                         const DistanceData & distance_data);
 
     OSMNodeID osm_source_id;
     OSMNodeID osm_target_id;
@@ -68,7 +71,7 @@ struct NodeBasedEdgeWithOSM : NodeBasedEdge
 inline NodeBasedEdge::NodeBasedEdge()
     : source(SPECIAL_NODEID), target(SPECIAL_NODEID), name_id(0), weight(0), forward(false),
       backward(false), roundabout(false), access_restricted(false), startpoint(true),
-      is_split(false), travel_mode(false)
+      is_split(false), travel_mode(false), distance_data(DistanceData())
 {
 }
 
@@ -83,11 +86,12 @@ inline NodeBasedEdge::NodeBasedEdge(NodeID source,
                                     bool startpoint,
                                     TravelMode travel_mode,
                                     bool is_split,
-                                    guidance::RoadClassificationData road_classification)
+                                    guidance::RoadClassificationData road_classification,
+                                    const DistanceData & distance_data)
     : source(source), target(target), name_id(name_id), weight(weight), forward(forward),
       backward(backward), roundabout(roundabout), access_restricted(access_restricted),
       startpoint(startpoint), is_split(is_split), travel_mode(travel_mode),
-      road_classification(std::move(road_classification))
+      road_classification(std::move(road_classification)), distance_data(distance_data)
 {
 }
 
@@ -120,7 +124,8 @@ inline NodeBasedEdgeWithOSM::NodeBasedEdgeWithOSM(
     bool startpoint,
     TravelMode travel_mode,
     bool is_split,
-    guidance::RoadClassificationData road_classification)
+    guidance::RoadClassificationData road_classification,
+    const DistanceData & distance_data)
     : NodeBasedEdge(SPECIAL_NODEID,
                     SPECIAL_NODEID,
                     name_id,
@@ -132,7 +137,8 @@ inline NodeBasedEdgeWithOSM::NodeBasedEdgeWithOSM(
                     startpoint,
                     travel_mode,
                     is_split,
-                    std::move(road_classification)),
+                    std::move(road_classification),
+                    distance_data),
       osm_source_id(std::move(source)), osm_target_id(std::move(target))
 {
 }

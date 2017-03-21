@@ -51,7 +51,8 @@ struct InternalExtractorEdge
                  true,
                  TRAVEL_MODE_INACCESSIBLE,
                  false,
-                 guidance::RoadClassificationData())
+                 guidance::RoadClassificationData(),
+                 DistanceData())
     {
     }
 
@@ -78,7 +79,8 @@ struct InternalExtractorEdge
                  startpoint,
                  travel_mode,
                  is_split,
-                 std::move(road_classification)),
+                 std::move(road_classification),
+                 DistanceData()),
           weight_data(std::move(weight_data))
     {
     }
